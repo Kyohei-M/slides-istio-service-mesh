@@ -65,6 +65,45 @@ class: center, middle, inverse
 - Galley
 
 ---
+### Envoy
+
+.right-small[
+<center><img src="https://avatars2.githubusercontent.com/u/30125649" width=100%></center>
+]
+
+.left-large[
+- a high-performance proxy developed in C++
+
+- deployed as a sidecar in the Kubernetes Pod
+
+- add to an existing deployment with no need to rearchitect or rewrite code
+]
+
+---
+### Envoy Features
+
+- Dynamic service discovery
+
+- Load balancing
+
+- TLS termination
+
+- HTTP/2 and gRPC proxies
+
+- Circuit breakers
+
+---
+### Envoy Features
+
+- Health checks
+
+- Staged rollouts with %-based traffic split
+
+- Fault injection
+
+- Rich metrics
+
+---
 ### 
 
 <center><img src="stackdriver-logs-viewer.png" width=100%></center>
