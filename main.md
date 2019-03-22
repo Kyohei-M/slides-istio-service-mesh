@@ -18,14 +18,45 @@ layout: false
 - Istio 未経験者
 
 ---
-### Microservice
+### Microservices
 
-- 
+- Loosely coupled
+
+- Independently deployable
+
+- Organized around business capabilities
+
+- Implemented using different programming languages
+
+- Continuous delivery/deployment of large, complex applications
 
 ---
 ### Service Mesh
 
-- 
+Describe the network of microservices that make up applications and the interactions between them
+
+- Service Discovery
+
+- Load Balancing
+
+- Failure Recovery
+
+- Metrics and Monitoring
+
+---
+### Service Mesh
+
+More complex operational requirements
+
+- A/B Testing
+
+- Canary Rollouts
+
+- Rate Limiting
+
+- Access Control
+
+- End-to-end Authentication
 
 ---
 class: center, middle, inverse
@@ -47,9 +78,22 @@ class: center, middle, inverse
 ]
 
 ---
+### Istio
+
+Connect, secure, control, and observe services
+
+.left-half[
+<center><img src="istio-services-1.png" width=100%></center>
+]
+
+.right-half[
+<center><img src="istio-services-2.png" width=100%></center>
+]
+
+---
 ### Architecture
 
-<center><img src="https://istio.io/docs/concepts/what-is-istio/arch.svg" width=80%></center>
+<center><img src="https://istio.io/docs/concepts/what-is-istio/arch.svg" width=65%></center>
 
 ---
 ### Architecture
@@ -67,46 +111,74 @@ class: center, middle, inverse
 ---
 ### Envoy
 
+A high-performance proxy developed in C++
+
 .right-small[
 <center><img src="https://avatars2.githubusercontent.com/u/30125649" width=100%></center>
 ]
 
 .left-large[
-- a high-performance proxy developed in C++
+- Deployed as a sidecar in the Kubernetes Pod
 
-- deployed as a sidecar in the Kubernetes Pod
-
-- add to an existing deployment with no need to rearchitect or rewrite code
+- Add to an existing deployment with no need to rearchitect or rewrite code
 ]
 
 ---
 ### Envoy Features
 
-- Dynamic service discovery
+- Dynamic Service Discovery
 
-- Load balancing
+- Load Balancing
 
-- TLS termination
+- TLS Termination
 
 - HTTP/2 and gRPC proxies
 
-- Circuit breakers
+- Circuit Breakers
 
 ---
 ### Envoy Features
 
-- Health checks
+- Health Checks
 
-- Staged rollouts with %-based traffic split
+- Staged Rollouts with %-based Traffic Split
 
-- Fault injection
+- Fault Injection
 
-- Rich metrics
+- Rich Metrics
 
 ---
-### 
+### Mixer
 
-<center><img src="stackdriver-logs-viewer.png" width=100%></center>
+A platform-independent component
+
+- Enforces access control and usage policies across the service mesh
+
+- Collects telemetry data from the Envoy proxy and other services
+
+- Includes a flexible plugin model
+
+---
+### Pilot
+
+Provides service discovery for...
+
+- Envoy sidecars
+    
+- Traffic management capabilities for intelligent routing  
+(e.g. A/B Tests, Canary Rollouts)
+    
+- Resiliency  
+(e.g. Timeouts, Retries, Circuit Breakers)
+
+---
+### Citadel
+
+Strong service-to-service/end-user authentication with built-in identity and credential management
+
+### Galley
+
+Istio’s configuration validation, ingestion, processing and distribution component
 
 ---
 class: center, middle, inverse
@@ -119,6 +191,8 @@ class: center, middle, inverse
 
 ---
 ### Links
+
+[Microservice Architecture](https://microservices.io/index.html)
 
 [Istio](https://istio.io/)
 
