@@ -1,7 +1,7 @@
 <DOCTYPE html>
     <html>
     <head>
-      <title>Istioで学ぶサービスメッシュ</title>
+      <title>Istio Service Mesh Introduction</title>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <style type="text/css">
           @import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
@@ -25,7 +25,7 @@
             font-size: 1.5em;
           }
           h1, h2, h3, h4, h5, h6 {
-            color: #006cb4;
+            color: #b40096;
             font-weight: 700;
           }
           table, th, td {
@@ -43,7 +43,7 @@
           }
           /* Link */
           a, a > code {
-            color: #ff1a75;
+            color: #006cb4;
             text-decoration: none;
           }
           /* Code */
@@ -71,6 +71,14 @@
             color: #CCC;
           }
           .inverse h1, .inverse h2 {
+            color: #f3f3f3;
+            line-height: 1em;
+          }
+          .inverse-red {
+            background: #b40096;
+            color: #CCC;
+          }
+          .inverse-red h1, .inverse-red h2 {
             color: #f3f3f3;
             line-height: 1em;
           }
@@ -109,6 +117,15 @@
           }
           .color-gray {
             color: rgb(173, 173, 173);
+          }
+          .normal h1, .normal h2, .normal h3{
+            color: rgb(0, 0, 0);
+          }
+          .blue h1, .blue h2, .blue h3{
+            color: #006cb4;
+          }
+          .red h1, .red h2, .red h3{
+            color: #b40096;
           }
         </style>
     </head>
