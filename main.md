@@ -8,7 +8,7 @@ class: center, middle, inverse-red
 
 ---
 layout: false
-### Assumptions
+### Required
 
 - Basic knowledge of Kubernetes
 
@@ -19,6 +19,19 @@ People who:
 - don't know Service Mesh
 
 - have never used Istio
+
+---
+### Contents
+
+1. What is Service Mesh?
+
+1. What is Istio?
+
+1. Setup using Istio on GKE
+
+---
+class: center, middle, inverse-red
+## What is Service Mesh?
 
 ---
 ### Microservices?
@@ -62,8 +75,8 @@ More complex operational requirements
 - End-to-end Authentication
 
 ---
-class: center, middle, red
-# What is Istio?
+class: center, middle, inverse-red
+## What is Istio?
 
 ---
 ### Istio
@@ -134,7 +147,9 @@ A high-performance proxy developed in C++
 ]
 
 ---
-### Envoy Features
+### Envoy
+
+Features
 
 - Dynamic Service Discovery
 
@@ -144,10 +159,10 @@ A high-performance proxy developed in C++
 
 - HTTP/2 and gRPC proxies
 
-- Circuit Breakers
-
 ---
-### Envoy Features
+### Envoy
+
+- Circuit Breakers
 
 - Health Checks
 
@@ -191,8 +206,8 @@ Strong service-to-service/end-user authentication with built-in identity and cre
 Istio’s configuration validation, ingestion, processing and distribution component
 
 ---
-class: center, middle, red
-# Setup using Istio on GKE
+class: center, middle, inverse-red
+## Setup using Istio on GKE
 
 ---
 ### Set IAM
@@ -218,7 +233,7 @@ Set the default compute service account to include:
 <center><img src="gcp-create-cluster.png" width=100%></center>
 
 ---
-### Show Istio Resources
+### Istio Resources
 
 ```console
 $ kubectl get svc -n istio-system
@@ -249,7 +264,7 @@ $ export PATH=$PWD/bin:$PATH
 
 ---
 class: center, middle, red
-# Example
+## Example
 
 ---
 ### Bookinfo
@@ -301,7 +316,7 @@ $ kubectl apply -f \
 ```
 
 ---
-### Check
+### Resources
 
 Confirm all services and pods are running:
 
@@ -324,21 +339,107 @@ bookinfo-gateway   17s
 ```
 
 ---
-### Control Ingress Traffic
+class: center, middle, red
+## Control Ingress Traffic
 
-Deploy the httpbin service:
+---
+### Httpbin
+
+HTTP testing service that can be used for experimenting with all kinds of Istio features
 
 ```console
 $ kubectl apply -f samples/httpbin/httpbin.yaml
 ```
 
+---
+### Set variables
+
 Set the ingress IP and ports:
 
+.zoom1[
 ```console
 $ export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 $ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
 $ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 ```
+]
+
+---
+### Create an Istio Gateway
+
+.zoom1[
+```console
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+spec:
+  selector:
+    istio: ingressgateway # use Istio default gateway implementation
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+EOF
+```
+]
+
+---
+### Configure routes
+
+.zoom1[
+```console
+kubectl apply -f - <<EOF
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - httpbin-gateway
+  http:
+  - match:
+    - uri:
+        prefix: /headers
+    route:
+    - destination:
+        port:
+          number: 8000
+        host: httpbin
+EOF
+```
+]
+
+---
+### Virtual Service
+
+Allows traffic for paths /status and /delay
+
+All other external requests will be rejected
+
+.zoom1[
+```console
+$ curl -I -HHost:httpbin.example.com http://$INGRESS_HOST:$INGRESS_PORT/status/200
+HTTP/1.1 200 OK
+...
+
+$ curl -I -HHost:httpbin.example.com http://$INGRESS_HOST:$INGRESS_PORT/headers
+HTTP/1.1 404 Not Found
+...
+
+```
+]
+
+---
+### Bookinfo Web Page
+
+<center><img src="bookinfo.png" width=100%></center>
 
 ---
 class: center, middle, red
@@ -361,6 +462,9 @@ class: center, middle, red
 [Istioサービスメッシュ入門](https://www.slideshare.net/yokawasa/istio-114360124)
 
 [Installing Istio on GKE](https://cloud.google.com/istio/docs/istio-on-gke/installing)
+
+---
+### Links
 
 [Install Istio on the Google Kubernetes Engine](https://istio.io/docs/setup/kubernetes/install/platform/gke/)
 
