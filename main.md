@@ -29,6 +29,8 @@ People who:
 
 1. Setup using Istio on GKE
 
+1. Sample Application
+
 1. Traffic Management Example
 
 ---
@@ -276,7 +278,7 @@ $ export PATH=$PWD/bin:$PATH
 ```
 
 ---
-class: center, middle, red
+class: center, middle, inverse-red
 ## Sample Application
 
 ---
@@ -534,22 +536,22 @@ $ kubectl apply -f \
 ---
 ### Links
 
-[Microservice Architecture](https://microservices.io/index.html)
+<u>[Microservice Architecture](https://microservices.io/index.html)</u>
 
-[Istio](https://istio.io/)
+<u>[Istio](https://istio.io/)</u>
 
-[Istio - Google Cloud](https://cloud.google.com/istio/)
+<u>[Istio - Google Cloud](https://cloud.google.com/istio/)</u>
 
-[Istioサービスメッシュ入門](https://www.slideshare.net/yokawasa/istio-114360124)
+<u>[Istioサービスメッシュ入門](https://www.slideshare.net/yokawasa/istio-114360124)</u>
 
-[Installing Istio on GKE](https://cloud.google.com/istio/docs/istio-on-gke/installing)
+<u>[Installing Istio on GKE](https://cloud.google.com/istio/docs/istio-on-gke/installing)</u>
 
 ---
 ### Links
 
-[Install Istio on the Google Kubernetes Engine](https://istio.io/docs/setup/kubernetes/install/platform/gke/)
+<u>[Install Istio on the Google Kubernetes Engine](https://istio.io/docs/setup/kubernetes/install/platform/gke/)</u>
 
-[Bookinfo Application](https://istio.io/docs/examples/bookinfo/)
+<u>[Bookinfo Application](https://istio.io/docs/examples/bookinfo/)</u>
 
 ---
 class: center, middle, red
