@@ -29,6 +29,8 @@ People who:
 
 1. Setup using Istio on GKE
 
+1. Traffic Management Example
+
 ---
 class: center, middle, inverse-red
 ## What is Service Mesh?
@@ -107,19 +109,18 @@ Connect, secure, control, and observe services
 ]
 
 ---
+class: header-margin
 ### Architecture
 
-<center><img src="https://istio.io/docs/concepts/what-is-istio/arch.svg" width=65%></center>
+<center><img src="https://istio.io/docs/concepts/what-is-istio/arch.svg" width=60%></center>
 
 ---
 ### Architecture
 
+.zoom2[
 - Data plane
 
     - Envoy
-
----
-### Architecture
 
 - Control plane
 
@@ -130,6 +131,7 @@ Connect, secure, control, and observe services
     - Citadel
 
     - Galley
+]
 
 ---
 ### Envoy
@@ -175,13 +177,18 @@ Features
 ---
 ### Mixer
 
-A platform-independent component
+Responsible for providing policy controls and telemetry collection
 
 - Enforces access control and usage policies across the service mesh
 
 - Collects telemetry data from the Envoy proxy and other services
 
 - Includes a flexible plugin model
+
+---
+### Mixer
+
+<center><img src="https://istio.io/docs/concepts/policies-and-telemetry/topology-without-cache.svg" width=80%></center>
 
 ---
 ### Pilot
@@ -195,6 +202,11 @@ Provides service discovery for:
     
 - Resiliency  
 (e.g. Timeouts, Retries, Circuit Breakers)
+
+---
+### Pilot
+
+<center><img src="https://istio.io/docs/concepts/traffic-management/PilotAdapters.svg" width=80%></center>
 
 ---
 ### Citadel
@@ -219,6 +231,7 @@ Set the default compute service account to include:
 - Editor (on by default)
 
 ---
+class: header-margin
 ### Set IAM
 
 <center><img src="https://istio.io/docs/setup/kubernetes/install/platform/gke/dm_gcp_iam_role.png" width=80%></center>
@@ -264,7 +277,7 @@ $ export PATH=$PWD/bin:$PATH
 
 ---
 class: center, middle, red
-## Example
+## Sample Application
 
 ---
 ### Bookinfo
@@ -419,17 +432,19 @@ EOF
 ---
 ### Virtual Service
 
-Allows traffic for paths /status and /delay
+Contains the route rules that Allows traffic for path /headers
 
 All other external requests will be rejected
 
 .zoom1[
 ```console
-$ curl -I -HHost:httpbin.example.com http://$INGRESS_HOST:$INGRESS_PORT/status/200
+$ export GATEWAY_URL=$INGRESS_HOST:$INGRESS_PORT
+
+$ $ curl -I http://$GATEWAY_URL/headers
 HTTP/1.1 200 OK
 ...
 
-$ curl -I -HHost:httpbin.example.com http://$INGRESS_HOST:$INGRESS_PORT/headers
+$ $ curl -I http://$GATEWAY_URL/status
 HTTP/1.1 404 Not Found
 ...
 
@@ -439,11 +454,77 @@ HTTP/1.1 404 Not Found
 ---
 ### Bookinfo Web Page
 
-<center><img src="bookinfo.png" width=100%></center>
+http://$GATEWAY_URL/productpage
+
+<center><img src="bookinfo.png" width=80%></center>
+
+---
+### Bookinfo Web Page
+
+If you refresh the page several times, you should see different versions of reviews shown in productpage, presented in a round robin style
+
+- red stars
+- black stars
+- no stars
+
+since we haven’t yet used Istio to control the version routing.
+
+---
+### Apply default destination rules
+
+Create default destination rules for the Bookinfo services:
+
+```console
+$ kubectl apply -f \
+  samples/bookinfo/networking/destination-rule-all.yaml
+```
+
+Display the destination rules:
+
+```console
+$ kubectl get destinationrules -o yaml
+```
 
 ---
 class: center, middle, red
 # Demo
+
+---
+class: center, middle, inverse-red
+# Traffic Management Example
+
+---
+### Route to v1
+
+Apply the virtual services:
+
+```console
+$ kubectl apply -f \
+  samples/bookinfo/networking/virtual-service-all-v1.yaml
+```
+
+Display the defined routes:
+
+```console
+$ kubectl get virtualservices -o yaml
+```
+
+---
+### Apply weight-based routing
+
+Transfer 50% of the traffic from reviews:v1 to reviews:v3
+
+```console
+$ kubectl apply -f \
+  samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
+```
+
+### Route based on user identity
+
+```console
+$ kubectl apply -f \
+  samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
+```
 
 ---
 ### Books
