@@ -538,7 +538,7 @@ $ kubectl apply -f \
 
 <u>[Microservice Architecture](https://microservices.io/index.html)</u>
 
-<u>[Istio](https://istio.io/)</u>
+<u>[Istio.io](https://istio.io/)</u>
 
 <u>[Istio - Google Cloud](https://cloud.google.com/istio/)</u>
 
