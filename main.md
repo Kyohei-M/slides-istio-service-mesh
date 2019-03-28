@@ -8,6 +8,23 @@ class: center, middle, inverse-red
 
 ---
 layout: false
+## whoami
+
+.left-small[
+    ![image](https://pbs.twimg.com/profile_images/994762110792953856/EheEvqBY_400x400.jpg)
+]
+
+.right-large[
+- Kyohei Mizumoto(@kyohmizu)
+
+- C# Software Engineer
+
+- Interests
+    - Docker/Kubernetes
+    - Go
+    - Security
+]
+---
 ### Required
 
 - Basic knowledge of Kubernetes
@@ -371,9 +388,14 @@ Set the ingress IP and ports:
 
 .zoom1[
 ```console
-$ export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-$ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
-$ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
+$ export INGRESS_HOST=$(kubectl -n istio-system get service istio-ingressgateway \
+  -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+$ export INGRESS_PORT=$(kubectl -n istio-system get service istio-ingressgateway \
+  -o jsonpath='{.spec.ports[?(@.name=="http2")].port}')
+
+$ export SECURE_INGRESS_PORT=$(kubectl -n istio-system get service \
+  istio-ingressgateway -o jsonpath='{.spec.ports[?(@.name=="https")].port}')
 ```
 ]
 
@@ -486,10 +508,6 @@ $ kubectl get destinationrules -o yaml
 ```
 
 ---
-class: center, middle, red
-# Demo
-
----
 class: center, middle, inverse-red
 # Traffic Management Example
 
@@ -514,17 +532,21 @@ $ kubectl get virtualservices -o yaml
 
 Transfer 50% of the traffic from reviews:v1 to reviews:v3
 
+.zoom1[
 ```console
 $ kubectl apply -f \
   samples/bookinfo/networking/virtual-service-reviews-50-v3.yaml
 ```
+]
 
 ### Route based on user identity
 
+.zoom1[
 ```console
 $ kubectl apply -f \
   samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
 ```
+]
 
 ---
 ### Books
@@ -534,22 +556,29 @@ $ kubectl apply -f \
 ---
 ### Links
 
-[Microservice Architecture](https://microservices.io/index.html)
+Microservice Architecture  
+<u>[https://microservices.io/index.html](https://microservices.io/index.html)</u>
 
-[Istio](https://istio.io/)
+Istio.io  
+<u>[https://istio.io/](https://istio.io/)</u>
 
-[Istio - Google Cloud](https://cloud.google.com/istio/)
+Istio Solutions | Google Cloud  
+<u>[https://cloud.google.com/istio/](https://cloud.google.com/istio/)</u>
 
-[Istioサービスメッシュ入門](https://www.slideshare.net/yokawasa/istio-114360124)
-
-[Installing Istio on GKE](https://cloud.google.com/istio/docs/istio-on-gke/installing)
+Istioサービスメッシュ入門  
+<u>[https://www.slideshare.net/yokawasa/istio-114360124](https://www.slideshare.net/yokawasa/istio-114360124)</u>
 
 ---
 ### Links
 
-[Install Istio on the Google Kubernetes Engine](https://istio.io/docs/setup/kubernetes/install/platform/gke/)
+Installing Istio on GKE  
+<u>[https://cloud.google.com/istio/docs/istio-on-gke/installing](https://cloud.google.com/istio/docs/istio-on-gke/installing)</u>
 
-[Bookinfo Application](https://istio.io/docs/examples/bookinfo/)
+Install Istio on the Google Kubernetes Engine  
+<u>[https://istio.io/docs/setup/kubernetes/install/platform/gke/](https://istio.io/docs/setup/kubernetes/install/platform/gke/)</u>
+
+Bookinfo Application  
+<u>[https://istio.io/docs/examples/bookinfo/](https://istio.io/docs/examples/bookinfo/)</u>
 
 ---
 class: center, middle, red
