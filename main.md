@@ -46,7 +46,7 @@ People who:
 
 1. Setup using Istio on GKE
 
-1. Traffic Management Example
+1. Traffic Management
 
 ---
 class: center, middle, inverse-red
@@ -509,12 +509,28 @@ $ kubectl get destinationrules -o yaml
 
 ---
 class: center, middle, inverse-red
-# Traffic Management Example
+# Traffic Management
 
 ---
-### Route to v1
+### Request routing
 
-Apply the virtual services:
+- Introduces the concept of a service version:
+
+  - Versions (v1, v2)
+  
+  - Environment (staging, prod)
+
+- Choose service version dynamically based on the routing rules that specified by using Pilot
+
+---
+### Request routing
+
+<center><img src="https://istio.io/docs/concepts/traffic-management/ServiceModel_Versions.svg" width=63%></center>
+
+---
+### Request routing
+
+Route to v1:
 
 ```console
 $ kubectl apply -f \
@@ -528,8 +544,29 @@ $ kubectl get virtualservices -o yaml
 ```
 
 ---
-### Apply weight-based routing
+### Discovery and load balancing
 
+- HTTP traffic is automatically re-routed through Envoy
+
+- 3 load balancing modes:
+
+  - Round robin
+  
+  - Random
+  
+  - Weighted least request
+
+- Checks the health of each instance
+
+---
+### Discovery and load balancing
+
+<center><img src="https://istio.io/docs/concepts/traffic-management/LoadBalancing.svg" width=70%></center>
+
+---
+### Discovery and load balancing
+
+Apply weight-based routing:  
 Transfer 50% of the traffic from reviews:v1 to reviews:v3
 
 .zoom1[
@@ -539,7 +576,7 @@ $ kubectl apply -f \
 ```
 ]
 
-### Route based on user identity
+Route based on user identity:
 
 .zoom1[
 ```console
@@ -547,6 +584,59 @@ $ kubectl apply -f \
   samples/bookinfo/networking/virtual-service-reviews-test-v2.yaml
 ```
 ]
+
+---
+### Handling failures
+
+- Timeouts
+
+- Bounded retries with timeout budgets and variable jitter between retries
+
+- Limits on number of concurrent connections and requests to upstream services
+
+- Active (periodic) health checks on each member of the load balancing pool
+
+- Fine-grained circuit breakers (passive health checks)
+
+---
+### Fault injection
+
+- Test the end-to-end failure recovery capability
+
+- Protocol-specific fault injection into the network  
+  instead of deleting pods/ delaying/ corrupting packets
+
+- 2 types of faults
+
+  - Delays: Timing failures (Increased network latency/ Overloaded upstream service)
+
+  - Aborts: Crash failures (HTTP error codes/ TCP connection failures)
+
+---
+### Canary rollout
+
+Introduce a new version of a service by first testing it using a small percentage of user traffic.
+
+Kubernetes provides features that support canary rollout:
+
+- Uses instance scaling to manage the traffic distribution
+
+- Only supports a simple (random percentage) canary rollout
+
+---
+### Canary rollout
+
+With Istio:
+
+- The number of pods are orthogonal to the control of version traffic routing
+
+- Control fine grain traffic percentages  
+  (e.g. route 1% of traffic without requiring 100 pods)
+  
+- Control traffic using other criteria  
+  (e.g. route traffic for specific users)
+
+
 
 ---
 ### Books
